@@ -1,0 +1,15 @@
+
+# build output dirs
+_out 
+_out/
+
+# htp config dir auto generated when using it
+.htp/
+
+# auto-generated project-level nvim config (my own custom marker shit)
+.nvim/
+.nvim
+
+# my own session manager
+Session.vim
+
