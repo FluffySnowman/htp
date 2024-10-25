@@ -22,6 +22,6 @@ other is by passing the `doc` argument to the script like so:
 
 Which will pretty much display the same content as this readme.
 
-Why are the docs inside the script itself ? *everywhere at the end of time
-starts playing...*
+Why are the docs inside the script itself ? *  * everywhere at the end of time
+starts playing...*  *
 
