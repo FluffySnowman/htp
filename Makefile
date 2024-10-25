@@ -1,6 +1,9 @@
 # Makefile specifically used for testing the api but without asserts or shit
 # like that since all I need is the output to show up in the terminal.
 
+# MAKEFLAGS += .SILENT
+.SILENT: build run
+
 # shorthands 
 h: help 
 b: build 
@@ -25,16 +28,32 @@ build:
 	go build -o $(GOLANG_BACKEND_BIN) -ldflags "-s -w" -trimpath main.go 
 
 # run the tests
+# run: build
+# 	setsid $(GOLANG_BACKEND_BIN) & \
+# 	sleep 1 ; \
+# 	$(MAKE) run-htp-cmds
+
+# run the backend and the tests and the n exit the backend when the tests are
+# done
 run: build
-	$(GOLANG_BACKEND_BIN) & \
-	sleep 1 ; \
-	$(MAKE) run-htp-cmds
+	( \
+		$(GOLANG_BACKEND_BIN) & \
+		BACKEND_PID=$$! ; \
+		sleep 1 ; \
+		$(MAKE) run-htp-cmds ; \
+		kill $$BACKEND_PID \
+	)
+
 
 # the htp commands for the tests
 run-htp-cmds:
 	@echo -e "[ HTP ] Setting base url"
 	$(HTP_SCRIPT_SRC) set-base-url http://localhost:8888
 	@echo -e "[ HTP ] Posting for json"
+	$(HTP_SCRIPT_SRC) req POST /jsonshit
 	$(HTP_SCRIPT_SRC) req POST /jsonshit | jq
+	$(HTP_SCRIPT_SRC) req POST / --data username=notuser title=shit description=lol
+	$(HTP_SCRIPT_SRC) req GET /doshit
+	$(HTP_SCRIPT_SRC) req POST /jsonshit --fields password,username
 
 

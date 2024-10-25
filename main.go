@@ -7,12 +7,12 @@ import (
 )
 
 func main() {
-    fmt.Println("starting backend...")
+	fmt.Println("[ BACKEND ] starting backend...")
 
 	router := http.NewServeMux()
 	router.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("processing htp request...")
-		fmt.Printf("--- request data ---\nHost:%s\nUser agent:%s\n", r.Host, r.UserAgent())
+		fmt.Println("[ BACKEND ] processing htp request...")
+		fmt.Printf("[ BACKEND ]--- request data ---\nHost:%s\nUser agent:%s\n", r.Host, r.UserAgent())
 		w.Write([]byte("htp yeet"))
 	})
 
@@ -44,7 +44,7 @@ type LoginShit struct {
 func DoSomeShitWithRequestBody(w http.ResponseWriter, req *http.Request) {
 
 	// print req header to test if this shit works
-	fmt.Println("user auth token -> ", req.Header.Get("Authorization"))
+	fmt.Println("[ BACKEND ] user auth token -> ", req.Header.Get("Authorization"))
 
 	decoder := json.NewDecoder(req.Body)
 	var requestBodyShit BodyShit
@@ -55,13 +55,13 @@ func DoSomeShitWithRequestBody(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	fmt.Printf("------\nrequest body shit -> \n%s\n%s\n%s\n%s\n%s\n------",
+	fmt.Printf("[ BACKEND ] ------\nrequest body shit -> \n%s\n%s\n%s\n%s\n%s\n------",
 		requestBodyShit.Username, requestBodyShit.UserID,
 		requestBodyShit.FileNumber, requestBodyShit.Title,
 		requestBodyShit.Description,
 	)
 
-	fmt.Println(requestBodyShit.Description)
+	fmt.Println("[ BACKEND ] ", requestBodyShit.Description)
 	w.Write([]byte(requestBodyShit.Username))
 
 }
@@ -85,7 +85,7 @@ func DoLoginShit(w http.ResponseWriter, req *http.Request) {
 
 func DoGetShit(w http.ResponseWriter, req *http.Request) {
 
-	fmt.Println("user auth token -> ", req.Header.Get("Authorization"))
+	fmt.Println("[ BACKEND ] user auth token -> ", req.Header.Get("Authorization"))
 	w.Write([]byte(fmt.Sprintf("auth token sent -> %v", req.Header.Get("Authorization"))))
 
 }
