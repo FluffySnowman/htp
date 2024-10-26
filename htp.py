@@ -13,13 +13,33 @@ from urllib.parse import urlparse
 documentation = """
 # Cheatsheet
 
-- **Set Base URL:** `./htp.py set-base-url --base-url http://localhost:8000/api/v1`
-- **Log In:** `./htp.py login --username admin --password secret`
-- **Log In Direct URL** `./htp.py login --url http://localhost:8888/login --username myuser --password mypass`
-- **Send GET Request:** `./htp.py req GET /users`
-- **Send GET Request to anywhere (like curl):** `./htp.py req GET --url http://localhost:8888/get-something`
-- **Send POST Request & Extract JSON Fields:** `./htp.py req POST /jsonshit --fields username,user_id`
-- **Send POST Request w/ JSON data:** `./htp.py req POST --url http://localhost:8888/login --data username=shit password=notshit`
+- Set Base URL
+
+`./htp.py set-base-url --base-url http://localhost:8000/api/v1`
+
+- Log In 
+
+`./htp.py login --username admin --password secret`
+
+- Log In Direct URL 
+
+`./htp.py login --url http://localhost:8888/login --username myuser --password mypass`
+
+- Send GET Request 
+
+`./htp.py req GET /users`
+
+- Send GET Request to anywhere (like curl) 
+
+`./htp.py req GET --url http://localhost:8888/get-something`
+
+- Send POST Request & Extract JSON Fields 
+
+`./htp.py req POST /jsonshit --fields username,user_id`
+
+- Send POST Request w/ JSON data
+
+`./htp.py req POST --url http://localhost:8888/login --data username=shit password=notshit`
 
 """
 
