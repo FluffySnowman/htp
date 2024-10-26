@@ -43,7 +43,7 @@ build:
 # 	$(MAKE) run-htp-cmds
 
 make-htp-executable:
-  chmod +x $(HTP_SCRIPT_SRC)
+	chmod +x $(HTP_SCRIPT_SRC)
 
 # run the backend and the tests and the n exit the backend when the tests are
 # done
