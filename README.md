@@ -73,16 +73,14 @@ Optional requirements:
 Install with curl (requires elevated privileges):
 
 ```bash
-# this might not work rn 
-sudo curl -L -o /usr/local/bin/htp https://raw.githubusercontent.com/fluffysnowman/htp/master/htp.py 
+sudo curl -L -o /usr/local/bin/htp https://raw.githubusercontent.com/fluffysnowman/htp/master/htp.py && sudo chmod +x /usr/local/bin/htp
 # or replace /usr/local/bin/htp with any directory/file in your $PATH
 ```
 
 Install with wget (requires elevated privileges):
 
 ```bash
-# this might not work rn 
-sudo wget -O /usr/local/bin/htp https://raw.githubusercontent.com/fluffysnowman/htp/master/htp.py
+sudo wget -O /usr/local/bin/htp https://raw.githubusercontent.com/fluffysnowman/htp/master/htp.py && sudo chmod +x /usr/local/bin/htp
 # or replace /usr/local/bin/htp with any directory/file in your $PATH
 ```
 
@@ -91,7 +89,7 @@ Install with git & make:
 ```bash
 git clone https://github.com/FluffySnowman/htp 
 cd htp 
-# this will copy the script to /usr/local/bin/htp
+# this will make the script executable and copy the script to /usr/local/bin/htp
 make install 
 ```
 

@@ -42,6 +42,9 @@ build:
 # 	sleep 1 ; \
 # 	$(MAKE) run-htp-cmds
 
+make-htp-executable:
+  chmod +x $(HTP_SCRIPT_SRC)
+
 # run the backend and the tests and the n exit the backend when the tests are
 # done
 run: build
@@ -70,7 +73,7 @@ run-htp-cmds:
 
 
 # copies ./htp.py to /usr/local/bun/htp
-install:
+install: make-htp-executable
 	echo -e "Elevated permissions will be needed to install to /usr/local/bin"
 	sudo cp -v $(HTP_SCRIPT_SRC) $(HTP_INSTALL_PATH)
 
