@@ -1,9 +1,26 @@
 # HTP 
 
-Simple and efficient http client written in python.
+Simple and efficient ergonomic (at least for me) http client written in python.
 
 Similar to `curl` or `httpie` but they didn't have features I wanted by default
 so I made my own toned-down version for common use cases.
+
+Features:
+
+- Automatically include authentication token in headers
+- Set a base url for the api so you can send requests to `/endpoint` rather than
+  `http://localhost:8000/api/v1/endpoint`
+- Send requests with json data (body) by using `--data key1=value1 key2=value2`
+  rather than doing some scuffed `'{"key1": "value1", "key2": "value2"...}'` and
+  so on.
+- Extract specific fields from the json response body using `--fields
+  field1,field2` rather than using `jq`'s scuffed syntax to filter through the
+  json response.
+- Log in / Do some Authentication with a username & password and the
+  `Authorization` header will be saved and used for all other requests.
+- Send requests to any URL by using the `--url` flag just like how you would
+  with `curl` or `httpie`. 
+- And some other cool shit.
 
 > **Note**: This tool is built as per my preferences and ergonomics so you
 > probably dont wanna bother using it since it could/will be confusing. I've
@@ -37,6 +54,47 @@ Which will pretty much display the same content as the [doc](#doc) or
 
 Why are the docs inside the script itself ? *everywhere at the end of time
 starts playing... 🫠*
+
+# Installation
+
+You can install this script by either directly downloading the `htp.py` file
+with curl/wget (or others) or by cloning the repo and using the `./Makefile`.
+
+Requirements: 
+
+- Python3 
+
+Optional requirements:
+
+- `curl` if you want to install with curl 
+- `wget` if you want to install with wget
+- `git` and `make` if you want to clone the repo and install with make 
+
+Install with curl (requires elevated privileges):
+
+```bash
+# this might not work rn 
+sudo curl -L -o /usr/local/bin/htp https://raw.githubusercontent.com/fluffysnowman/htp/master/htp.py 
+# or replace /usr/local/bin/htp with any directory/file in your $PATH
+```
+
+Install with wget (requires elevated privileges):
+
+```bash
+# this might not work rn 
+sudo wget -O /usr/local/bin/htp https://raw.githubusercontent.com/fluffysnowman/htp/master/htp.py
+# or replace /usr/local/bin/htp with any directory/file in your $PATH
+```
+
+Install with git & make:
+
+```bash
+git clone https://github.com/FluffySnowman/htp 
+cd htp 
+# this will copy the script to /usr/local/bin/htp
+make install 
+```
+
 
 # Docs 
 
