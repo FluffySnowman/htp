@@ -32,6 +32,7 @@ Features:
 
 <!--toc:start-->
 - [HTP](#htp)
+- [Installation](#installation)
 - [Docs](#docs)
   - [Brief](#brief)
   - [Cheatsheet](#cheatsheet)
@@ -46,7 +47,7 @@ is incomplete and will stay that way) and the other is by passing the `doc`
 argument to the script like so:
 
 ```shell 
-./htp.py doc
+htp doc
 ```
 
 Which will pretty much display the same content as the [doc](#doc) or
@@ -117,31 +118,31 @@ token which is then sent with all requests.
 
 - Set Base URL
 
-`./htp.py set-base-url --base-url http://localhost:8000/api/v1`
+`htp set-base-url --base-url http://localhost:8000/api/v1`
 
 - Log In 
 
-`./htp.py login --username admin --password secret`
+`htp login --username admin --password secret`
 
 - Log In Direct URL 
 
-`./htp.py login --url http://localhost:8888/login --username myuser --password mypass`
+`htp login --url http://localhost:8888/login --username myuser --password mypass`
 
 - Send GET Request 
 
-`./htp.py req GET /users`
+`htp req GET /users`
 
 - Send GET Request to anywhere (like curl) 
 
-`./htp.py req GET --url http://localhost:8888/get-something`
+`htp req GET --url http://localhost:8888/get-something`
 
 - Send POST Request & Extract JSON Fields 
 
-`./htp.py req POST /jsonshit --fields username,user_id`
+`htp req POST /jsonshit --fields username,user_id`
 
 - Send POST Request w/ JSON data
 
-`./htp.py req POST --url http://localhost:8888/login --data username=shit password=notshit`
+`htp req POST --url http://localhost:8888/login --data username=shit password=notshit`
 
 <br /> 
 <hr /> 
@@ -158,7 +159,7 @@ gonna use this.
 Set the base URL for the API:
 
 ```sh
-./htp.py set-base-url --base-url http://localhost:8000/api/v1
+htp set-base-url --base-url http://localhost:8000/api/v1
 ```
 
 This will create a `.htp/` directory in the current directory that you are in.
@@ -171,7 +172,7 @@ The base url will be save to the `.htp/base_url.env` file.
 Log in to the API to obtain an authentication token:
 
 ```sh
-./htp.py login --username your_username --password your_password
+htp login --username your_username --password your_password
 ```
 
 By default this will send a POST request to `${base_url}/login` and will save
@@ -180,7 +181,7 @@ the contents of the `Authorization` header to `.htp/auth_token.env` file.
 You can also manually specify the endpoint to send the login request to:
 
 ```sh
-./htp.py login --url http://localhost:8888/login --username myuser --password mypass
+htp login --url http://localhost:8888/login --username myuser --password mypass
 ```
 
 Which will also save the contents of the `Authorization` header to
@@ -196,9 +197,9 @@ Send a GET request to an endpoint:
 
 ```sh
 # Send a GET request to ${base_url}/endpoint 
-./htp.py req GET /endpoint
+htp req GET /endpoint
 # Send a GET request to http://localhost:8000/api/v1/endpoint 
-./htp.py req GET ...
+htp req GET ...
 ```
 
 **THIS DOCUMENTATION IS INCOMPLETE AND WILL PROBABLY NOT BE UPDATED** since I
