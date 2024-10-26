@@ -10,6 +10,19 @@ import argparse
 from typing import Optional, Dict, Any
 from urllib.parse import urlparse
 
+documentation = """
+# Cheatsheet
+
+- **Set Base URL:** `./htp.py set-base-url --base-url http://localhost:8000/api/v1`
+- **Log In:** `./htp.py login --username admin --password secret`
+- **Log In Direct URL** `./htp.py login --url http://localhost:8888/login --username myuser --password mypass`
+- **Send GET Request:** `./htp.py req GET /users`
+- **Send GET Request to anywhere (like curl):** `./htp.py req GET --url http://localhost:8888/get-something`
+- **Send POST Request & Extract JSON Fields:** `./htp.py req POST /jsonshit --fields username,user_id`
+- **Send POST Request w/ JSON data:** `./htp.py req POST --url http://localhost:8888/login --data username=shit password=notshit`
+
+"""
+
 class HttpClient:
     def __init__(self, base_url: Optional[str] = None, login_path: str = "/login"):
         self.config_dir = ".htp"
@@ -145,6 +158,8 @@ def main():
     req_parser.add_argument('--data', nargs='+', help='Data in key=value format')
     req_parser.add_argument('--fields', help='comma separated list of fields to extract')
 
+    subparsers.add_parser('doc', help='Shows Documentation', parents=[])
+
     args = parser.parse_args()
     
     client = HttpClient(
@@ -171,6 +186,8 @@ def main():
         else:
             print("Must provide either --url or (--base-url/configured base URL with path)")
             sys.exit(1)
+    elif args.command == 'doc':
+      print(documentation)
     else:
         parser.print_help()
         sys.exit(1)
