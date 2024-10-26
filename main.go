@@ -24,6 +24,8 @@ func main() {
 	router.HandleFunc("POST /jsonshit", DoJsonResponse)
 	// test whether the auth header is sent with the get requests
 	router.HandleFunc("GET /doshit", DoGetShit)
+	// testing query params
+	router.HandleFunc("GET /querytest", HandleQueryParams)
 
 	http.ListenAndServe(":8888", router)
 }
@@ -77,6 +79,8 @@ func DoLoginShit(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	fmt.Printf("\n[ BACKEND ] Received login data -> username: %s; password %s;\n", requestBodyShit.Username, requestBodyShit.Password)
+
 	w.Header().Add("Authorization", "thisisanauthtoken")
 
 	w.Write([]byte(requestBodyShit.Username))
@@ -108,4 +112,11 @@ func DoJsonResponse(w http.ResponseWriter, req *http.Request) {
 		w.Write([]byte("shit failed"))
 	}
 
+}
+
+func HandleQueryParams(w http.ResponseWriter, req *http.Request) {
+	urlParams := req.URL.Query()
+	user_id := urlParams.Get("user_id")
+	fmt.Printf("[ BACKEND ] User id from query params -> %v\n", user_id)
+	w.Write([]byte(fmt.Sprintf("user id -> %s\n", user_id)))
 }

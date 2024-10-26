@@ -8,6 +8,7 @@
 h: help 
 b: build 
 r: run
+rb: run-backend
 
 help:
 	@echo -e "\nMakefile Help List for htp\n"
@@ -37,13 +38,16 @@ build:
 # done
 run: build
 	( \
-		$(GOLANG_BACKEND_BIN) & \
-		BACKEND_PID=$$! ; \
-		sleep 1 ; \
-		$(MAKE) run-htp-cmds ; \
-		kill $$BACKEND_PID \
+	$(GOLANG_BACKEND_BIN) & \
+	BACKEND_PID=$$! ; \
+	sleep 1 ; \
+	$(MAKE) run-htp-cmds ; \
+	kill $$BACKEND_PID \
 	)
 
+# runs the golang backend without the tests (used for manual shit)
+run-backend: build
+	$(GOLANG_BACKEND_BIN)
 
 # the htp commands for the tests
 run-htp-cmds:
