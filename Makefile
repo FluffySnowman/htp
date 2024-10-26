@@ -11,9 +11,13 @@ r: run
 rb: run-backend
 
 help:
-	@echo -e "\nMakefile Help List for htp\n"
-	@echo -e "\t\b\b\b\bbuild (b)\tBuilds the golang backend for testing"
-	@echo -e "\t\b\b\b\brun (r)\tRuns the tests"
+	@echo -e "\nMakefile Help List for HTP\n"
+	@echo -e "\t\b\b\b\binstall \t(i)\tInstalls (copies) script to /usr/local/bin"
+	@echo -e "\t\b\b\b\brun \t(r)\tRuns the tests"
+	@echo -e "\t\b\b\b\bbuild \t(b)\tBuilds the golang backend for testing"
+	@echo -e "\t\b\b\b\brun-backend\t(rb)\tBuilds & runs golang backend for testing"
+	@echo -e ""
+	@echo -e "\t\b\b\b\bhelp \t(h)\tShows this help menu\n"
 
 
 # Output dir for the golang builds so the dir can be gitignored instead of the
@@ -23,6 +27,10 @@ GOLANG_BUILD_DIR := _out
 GOLANG_BACKEND_BIN := $(GOLANG_BUILD_DIR)/htp_backend
 # the actual htp pythin script 
 HTP_SCRIPT_SRC := ./htp.py
+# The installation path (global system access) .
+# This doesn't have a file extension since there's a shebang at the top of the
+# file with #!/usr/bin/env python3 .
+HTP_INSTALL_PATH := /usr/local/bin/htp
 
 # Build the golang backend before actually doing any tests etc
 build:
@@ -60,4 +68,9 @@ run-htp-cmds:
 	$(HTP_SCRIPT_SRC) req GET /doshit
 	$(HTP_SCRIPT_SRC) req POST /jsonshit --fields password,username
 
+
+# copies ./htp.py to /usr/local/bun/htp
+install:
+	echo -e "Elevated permissions will be needed to install to /usr/local/bin"
+	sudo cp -v $(HTP_SCRIPT_SRC) $(HTP_INSTALL_PATH)
 

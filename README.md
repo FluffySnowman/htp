@@ -5,6 +5,14 @@ Simple and efficient http client written in python.
 Similar to `curl` or `httpie` but they didn't have features I wanted by default
 so I made my own toned-down version for common use cases.
 
+> **Note**: This tool is built as per my preferences and ergonomics so you
+> probably dont wanna bother using it since it could/will be confusing. I've
+> been using this script (now updated with some more features) for a long time
+> and its annoying having to use my dotfiles for it which is why I've made this
+> public repo. The code is public so if you wanna see how it works, its here-
+> but dont't expect me to accept pull requests or issues since I've built this
+> for myself and it just happens to be public. 
+
 <!--toc:start-->
 - [HTP](#htp)
 - [Docs](#docs)
@@ -16,21 +24,16 @@ so I made my own toned-down version for common use cases.
     - [Sending Requests](#sending-requests)
 <!--toc:end-->
 
-> Note: This tool is built for my use case and preferences so  you probably dont
-> wanna bother using it. I've been using this script (now updated with some more
-> features) for a long time and its annoying having to use my dotfiles for it
-> which is why I've made this repo public. Don't expect me to accept pull
-> requests since this is just for me.
-
-There are 2 places to find the documentation. One is here in the readme and the
-other is by passing the `doc` argument to the script like so:
+There are 2 places to find the documentation. One is here in the readme (which
+is incomplete and will stay that way) and the other is by passing the `doc`
+argument to the script like so:
 
 ```shell 
 ./htp.py doc
 ```
 
-Which will pretty much display the same content as the doc section on this
-readme.
+Which will pretty much display the same content as the [doc](#doc) or
+[cheatsheet](#cheatsheet) section on this readme.
 
 Why are the docs inside the script itself ? *everywhere at the end of time
 starts playing... 🫠*
