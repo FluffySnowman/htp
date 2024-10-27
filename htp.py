@@ -15,35 +15,46 @@ documentation = """
 
 - Set Base URL
 
-`./htp.py set-base-url --base-url http://localhost:8000/api/v1`
+`htp set-base-url --base-url http://localhost:8000/api/v1`
 
 - Log In 
 
-`./htp.py login --username admin --password secret`
+`htp login --username admin --password secret`
 
 - Log In Direct URL 
 
-`./htp.py login --url http://localhost:8888/login --username myuser --password mypass`
+`htp login --url http://localhost:8888/login --username myuser --password mypass`
 
 - Send GET Request 
 
-`./htp.py req GET /users`
+`htp req GET /users`
 
 - Send GET Request to anywhere (like curl) 
 
-`./htp.py req GET --url http://localhost:8888/get-something`
+`htp req GET --url http://localhost:8888/get-something`
 
 - Send POST Request & Extract JSON Fields 
 
-`./htp.py req POST /jsonshit --fields username,user_id`
+`htp req POST /jsonshit --fields username,user_id`
 
 - Send POST Request w/ JSON data
 
-`./htp.py req POST --url http://localhost:8888/login --data username=shit password=notshit`
+`htp req POST --url http://localhost:8888/login --data username=shit password=notshit`
 
 - Quick GET Request (just provide URL)
 
-`./htp.py http://api.example.com/data`
+`htp http://api.example.com/data`
+
+- Show coloured output 
+
+```bash
+export HTP_COL=1
+htp req GET /users
+
+# OR 
+HTP_COL=1 htp req GET /users
+```
+
 """
 
 # bool for if HTP_COLOR is set
@@ -302,7 +313,7 @@ def main():
     elif args.command == 'doc':
         print(documentation)
     elif args.command == 'version':
-        print("v0.0.3")
+        print("v0.0.4")
         print("Upstream: https://github.com/fluffysnowman/htp")
     else:
         parser.print_help()
