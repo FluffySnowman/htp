@@ -41,7 +41,37 @@ documentation = """
 
 `./htp.py req POST --url http://localhost:8888/login --data username=shit password=notshit`
 
+- Quick GET Request (just provide URL)
+
+`./htp.py http://api.example.com/data`
 """
+
+class ColorPrinter:
+    BLUE = '\033[94m'
+    GREEN = '\033[92m'
+    ENDC = '\033[0m'
+
+    @staticmethod
+    def format_json(obj, indent=0):
+        if isinstance(obj, dict):
+            items = []
+            for key, value in obj.items():
+                key_str = f'{" " * indent}{ColorPrinter.BLUE}"{key}"{ColorPrinter.ENDC}: '
+                value_str = ColorPrinter.format_json(value, indent + 2)
+                items.append(key_str + value_str)
+            return "{\n" + ",\n".join(items) + "\n" + " " * (indent - 2) + "}"
+        elif isinstance(obj, list):
+            items = [ColorPrinter.format_json(item, indent + 2) for item in obj]
+            return "[\n" + ",\n".join(f"{' ' * indent}{item}" for item in items) + "\n" + " " * (indent - 2) + "]"
+        elif isinstance(obj, str):
+            return f'{ColorPrinter.GREEN}"{obj}"{ColorPrinter.ENDC}'
+        elif isinstance(obj, (int, float)):
+            return f'{ColorPrinter.GREEN}{obj}{ColorPrinter.ENDC}'
+        elif obj is None:
+            return f'{ColorPrinter.GREEN}null{ColorPrinter.ENDC}'
+        elif isinstance(obj, bool):
+            return f'{ColorPrinter.GREEN}{str(obj).lower()}{ColorPrinter.ENDC}'
+        return str(obj)
 
 class HttpClient:
     def __init__(self, base_url: Optional[str] = None, login_path: str = "/login"):
@@ -143,19 +173,35 @@ class HttpClient:
                             extracted_data = [{field: item.get(field) for field in field_list} for item in response_data]
                         else:
                             extracted_data = {field: response_data.get(field) for field in field_list}
-                        print(json.dumps(extracted_data, indent=2))
+                        print(ColorPrinter.format_json(extracted_data))
                     else:
-                        print(json.dumps(response_data, indent=2))
+                        print(ColorPrinter.format_json(response_data))
                 except json.JSONDecodeError:
                     print(response_text)
         except urllib.error.HTTPError as e:
-            print(f"HTTPError: {e.code} {e.reason}")
+            try:
+                error_text = e.read().decode("utf-8")
+                try:
+                    error_json = json.loads(error_text)
+                    print(f"HTTPError {e.code}: {e.reason}")
+                    print(ColorPrinter.format_json(error_json))
+                except json.JSONDecodeError:
+                    print(f"HTTPError {e.code}: {e.reason}")
+                    print(error_text)
+            except:
+                print(f"HTTPError: {e.code} {e.reason}")
             sys.exit(1)
         except urllib.error.URLError as e:
             print(f"URLError: {e.reason}")
             sys.exit(1)
 
 def main():
+    # Check if a direct URL is provided as the only argument
+    if len(sys.argv) == 2 and not sys.argv[1].startswith('-') and '://' in sys.argv[1]:
+        client = HttpClient()
+        client.send_request("GET", direct_url=sys.argv[1])
+        sys.exit(0)
+
     parser = argparse.ArgumentParser(description='htp api client')
     subparsers = parser.add_subparsers(dest='command', help='Commands')
 
@@ -207,7 +253,7 @@ def main():
             print("Must provide either --url or (--base-url/configured base URL with path)")
             sys.exit(1)
     elif args.command == 'doc':
-      print(documentation)
+        print(documentation)
     else:
         parser.print_help()
         sys.exit(1)

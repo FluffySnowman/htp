@@ -24,6 +24,8 @@ func main() {
 	router.HandleFunc("POST /jsonshit", DoJsonResponse)
 	// test whether the auth header is sent with the get requests
 	router.HandleFunc("GET /doshit", DoGetShit)
+    // get request with json response
+	router.HandleFunc("GET /getjson", GetJson)
 	// testing query params
 	router.HandleFunc("GET /querytest", HandleQueryParams)
 
@@ -91,6 +93,27 @@ func DoGetShit(w http.ResponseWriter, req *http.Request) {
 
 	fmt.Println("[ BACKEND ] user auth token -> ", req.Header.Get("Authorization"))
 	w.Write([]byte(fmt.Sprintf("auth token sent -> %v", req.Header.Get("Authorization"))))
+
+}
+
+
+func GetJson(w http.ResponseWriter, req *http.Request) {
+
+	fmt.Println("[ BACKEND ] GetJson is doing the GET json response")
+
+	jsonData := map[string]interface{}{
+		"username": "fluffy",
+		"password": "totallysecurepassword",
+		"user_id":  42069,
+	}
+
+    err := json.NewEncoder(w).Encode(jsonData)
+
+	if err != nil {
+		fmt.Printf("\033[31m[ ERROR ] \033[97;40m%v\033[0m\n", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("shit failed"))
+	}
 
 }
 
