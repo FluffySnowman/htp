@@ -96,6 +96,18 @@ func DoGetShit(w http.ResponseWriter, req *http.Request) {
 
 func DoJsonResponse(w http.ResponseWriter, req *http.Request) {
 
+    // print the json request data 
+    reqData := map[string]interface{}{}
+    decoder := json.NewDecoder(req.Body)
+    err := decoder.Decode(&reqData)
+    if err != nil {
+        fmt.Printf("\033[31m[ ERROR ] \033[97;40m%v\033[0m\n", err)
+        w.WriteHeader(http.StatusInternalServerError)
+        w.Write([]byte("sometheng went wronig"))
+    }
+
+    fmt.Printf("[ BACKEND ] Received json request data -> %v\n", reqData)
+
 	fmt.Println("[ BACKEND ] DoJsonResponse is doing the json response")
 
 	jsonData := map[string]interface{}{
@@ -104,7 +116,7 @@ func DoJsonResponse(w http.ResponseWriter, req *http.Request) {
 		"user_id":  42069,
 	}
 
-	err := json.NewEncoder(w).Encode(jsonData)
+	err = json.NewEncoder(w).Encode(jsonData)
 
 	if err != nil {
 		fmt.Printf("\033[31m[ ERROR ] \033[97;40m%v\033[0m\n", err)
