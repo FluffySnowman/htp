@@ -46,32 +46,77 @@ documentation = """
 `./htp.py http://api.example.com/data`
 """
 
+# bool for if HTP_COLOR is set
+# htp_color_env = os.environ['HTP_COLOR']
+# htp_color_env = os.environ.get('HTP_COLOR', 0)
+# htp_color_env = os.getenv('HTP_COL')
+htp_color_env = os.getenv("HTP_COL") == "1"
+
 class ColorPrinter:
     BLUE = '\033[94m'
     GREEN = '\033[92m'
     ENDC = '\033[0m'
 
     @staticmethod
+    def should_colorize():
+        return htp_color_env and sys.stdout.isatty()
+        # if htp_color_env:
+        #     return sys.stdout.isatty()
+        # else:
+        #     return False
+        # return sys.stdout.isatty()
+
+    @staticmethod
+    def format_value(value):
+        if ColorPrinter.should_colorize():
+            return f'{ColorPrinter.GREEN}{value}{ColorPrinter.ENDC}'
+        return value
+
+    @staticmethod
+    def format_key(key):
+        if ColorPrinter.should_colorize():
+            return f'{ColorPrinter.BLUE}{key}{ColorPrinter.ENDC}'
+        return key
+
+    @staticmethod
     def format_json(obj, indent=0):
+        indent_str = " " * indent
+        
         if isinstance(obj, dict):
+            if not obj:
+                return "{}"
             items = []
             for key, value in obj.items():
-                key_str = f'{" " * indent}{ColorPrinter.BLUE}"{key}"{ColorPrinter.ENDC}: '
+                key_str = f'{indent_str}  "{ColorPrinter.format_key(key)}": '
                 value_str = ColorPrinter.format_json(value, indent + 2)
                 items.append(key_str + value_str)
-            return "{\n" + ",\n".join(items) + "\n" + " " * (indent - 2) + "}"
+            return "{\n" + ",\n".join(items) + f"\n{indent_str}}}"
+        
         elif isinstance(obj, list):
-            items = [ColorPrinter.format_json(item, indent + 2) for item in obj]
-            return "[\n" + ",\n".join(f"{' ' * indent}{item}" for item in items) + "\n" + " " * (indent - 2) + "]"
+            if not obj:
+                return "[]"
+            items = []
+            for item in obj:
+                item_str = ColorPrinter.format_json(item, indent)
+                items.append(f"{indent_str}{item_str}")
+            return "[\n" + ",\n".join(items) + f"\n{indent_str[:-2]}]"
+        
         elif isinstance(obj, str):
-            return f'{ColorPrinter.GREEN}"{obj}"{ColorPrinter.ENDC}'
+            return f'"{ColorPrinter.format_value(obj)}"'
         elif isinstance(obj, (int, float)):
-            return f'{ColorPrinter.GREEN}{obj}{ColorPrinter.ENDC}'
+            return ColorPrinter.format_value(str(obj))
         elif obj is None:
-            return f'{ColorPrinter.GREEN}null{ColorPrinter.ENDC}'
+            return ColorPrinter.format_value("null")
         elif isinstance(obj, bool):
-            return f'{ColorPrinter.GREEN}{str(obj).lower()}{ColorPrinter.ENDC}'
+            return ColorPrinter.format_value(str(obj).lower())
         return str(obj)
+
+    @staticmethod
+    def print_json(obj):
+        if ColorPrinter.should_colorize():
+            print(ColorPrinter.format_json(obj))
+        else:
+            print(json.dumps(obj, indent=2))
 
 class HttpClient:
     def __init__(self, base_url: Optional[str] = None, login_path: str = "/login"):
@@ -173,9 +218,9 @@ class HttpClient:
                             extracted_data = [{field: item.get(field) for field in field_list} for item in response_data]
                         else:
                             extracted_data = {field: response_data.get(field) for field in field_list}
-                        print(ColorPrinter.format_json(extracted_data))
+                        ColorPrinter.print_json(extracted_data)
                     else:
-                        print(ColorPrinter.format_json(response_data))
+                        ColorPrinter.print_json(response_data)
                 except json.JSONDecodeError:
                     print(response_text)
         except urllib.error.HTTPError as e:
@@ -183,16 +228,16 @@ class HttpClient:
                 error_text = e.read().decode("utf-8")
                 try:
                     error_json = json.loads(error_text)
-                    print(f"HTTPError {e.code}: {e.reason}")
-                    print(ColorPrinter.format_json(error_json))
+                    print(f"HTTPError {e.code}: {e.reason}", file=sys.stderr)
+                    ColorPrinter.print_json(error_json)
                 except json.JSONDecodeError:
-                    print(f"HTTPError {e.code}: {e.reason}")
+                    print(f"HTTPError {e.code}: {e.reason}", file=sys.stderr)
                     print(error_text)
             except:
-                print(f"HTTPError: {e.code} {e.reason}")
+                print(f"HTTPError: {e.code} {e.reason}", file=sys.stderr)
             sys.exit(1)
         except urllib.error.URLError as e:
-            print(f"URLError: {e.reason}")
+            print(f"URLError: {e.reason}", file=sys.stderr)
             sys.exit(1)
 
 def main():
@@ -257,7 +302,7 @@ def main():
     elif args.command == 'doc':
         print(documentation)
     elif args.command == 'version':
-        print("v0.0.2")
+        print("v0.0.3")
         print("Upstream: https://github.com/fluffysnowman/htp")
     else:
         parser.print_help()
