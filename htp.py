@@ -226,6 +226,8 @@ def main():
 
     subparsers.add_parser('doc', help='Shows Documentation', parents=[])
 
+    subparsers.add_parser('version', help='Shows version', parents=[])
+
     args = parser.parse_args()
     
     client = HttpClient(
@@ -254,6 +256,9 @@ def main():
             sys.exit(1)
     elif args.command == 'doc':
         print(documentation)
+    elif args.command == 'version':
+        print("v0.0.2")
+        print("Upstream: https://github.com/fluffysnowman/htp")
     else:
         parser.print_help()
         sys.exit(1)
